@@ -6,10 +6,25 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var authenticateSession = require('./middleware/authentication_session');
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var logger = require('...');
 
 var app = express();
+
+/* 1. Módulo express-session */
+const session = require('express-session');
+
+
+/* 2. Configuración del middleware */
+app.use(session({
+  secret: process.env.TOKEN_SECRET,
+  name: 'session.security', 
+  resave: false,
+  saveUninitialized: false,
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
