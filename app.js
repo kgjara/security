@@ -17,6 +17,10 @@ var app = express();
 /* 1. Módulo express-session */
 const session = require('express-session');
 
+/* 1. Referencia a los middlewares */
+var authenticateSession = require('./middleware/authentication_session');
+var authorizationSession = require('./middleware/authorization_session');
+
 
 /* 2. Configuración del middleware */
 app.use(session({
@@ -37,7 +41,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/users',authenticateSession, authorizationSession, usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
